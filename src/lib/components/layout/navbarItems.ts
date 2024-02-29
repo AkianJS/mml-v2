@@ -1,5 +1,5 @@
-import NavigationSearch from "../search-bar/NavigationSearch.svelte";
-import type { NavbarItemI } from "./navbar.interface";
+import NavigationSearch from '../search-bar/NavigationSearch.svelte';
+import type { NavbarItemI } from './navbar.interface';
 
 export function populateNavbarItemI(): NavbarItemI[] {
 	const navbarItems: NavbarItemI[] = [
@@ -8,56 +8,56 @@ export function populateNavbarItemI(): NavbarItemI[] {
 			link: '/',
 			position: 'left',
 			order: 0,
-            type: 'normal'
+			type: 'normal'
 		},
 		{
-            label: 'Genre',
+			label: 'Genre',
 			position: 'left',
 			order: 1,
-            type: 'component'
+			type: 'component'
 		},
 		{
 			label: 'Trending',
 			link: '/trending',
 			position: 'left',
 			order: 2,
-            type: 'normal'
+			type: 'normal'
 		},
 		{
 			label: 'Coming Soon',
 			link: '/coming-soon',
 			position: 'left',
 			order: 3,
-            type: 'normal'
+			type: 'normal'
 		},
 		{
 			label: 'Top Rated',
 			link: '/top-rated',
 			position: 'left',
 			order: 4,
-            type: 'normal'
+			type: 'normal'
 		},
-        {
-            position: 'right',
-            order: 0,
-            type: 'component',
-            component: NavigationSearch
-        },
-        {
-            icon: 'basil:notification-outline',
-            link: '/login',
-            position: 'right',
-            order: 1,
-            type: 'normal'
-        },
-        {
-            icon: 'basil:bookmark-outline',
-            link: '/favourite',
-            position: 'right',
-            order: 2,
-            type: 'normal'
-        }
+		{
+			position: 'right',
+			order: 0,
+			type: 'component',
+			component: NavigationSearch
+		},
+		{
+			icon: 'basil:notification-outline',
+			link: '/login',
+			position: 'right',
+			order: 1,
+			type: 'normal'
+		},
+		{
+			icon: 'basil:bookmark-outline',
+			link: '/favourite',
+			position: 'right',
+			order: 2,
+			type: 'normal'
+		}
 	];
 
-	return navbarItems.toSorted((a, b) => a.order - b.order)
+	return navbarItems.toSorted((a, b) => a.order - b.order);
 }

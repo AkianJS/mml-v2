@@ -7,9 +7,9 @@
 
 <li>
 	{#if navbarItem.link && navbarItem.type === 'normal'}
-		<a href={navbarItem.link} class="px-2 py-2 text-white text-sm flex gap-2 cursor-pointer">
+		<a href={navbarItem.link} class="flex cursor-pointer gap-2 text-sm text-white">
 			{#if navbarItem.icon}
-				<span class="p-2 rounded-2xl bg-secondary">
+				<span class="rounded-2xl bg-secondary p-2">
 					<Icon width={24} height={24} icon={navbarItem.icon} />
 				</span>
 			{/if}
@@ -18,10 +18,7 @@
 			{/if}
 		</a>
 	{:else if navbarItem.action && navbarItem.type === 'normal'}
-		<button
-			on:click={navbarItem.action}
-			class="px-2 py-2 text-white text-sm flex gap-2 cursor-pointer"
-		>
+		<button on:click={navbarItem.action} class="flex cursor-pointer gap-2 text-sm text-white">
 			{#if navbarItem.icon}
 				<Icon width={24} height={24} icon={navbarItem.icon} />
 			{/if}

@@ -9,10 +9,10 @@
 	const rightItems = navbarItems.filter((item) => item.position === 'right');
 </script>
 
-<nav class="w-full h-16 bg-primary border-b border-b-gray-500">
-	<div class="max-w-screen-2xl content-center mx-auto h-full flex justify-between items-center">
+<nav class="h-16 w-full border-b border-b-gray-500 bg-primary">
+	<div class="mx-auto flex h-full max-w-screen-2xl content-center items-center justify-between">
 		<div>
-			<ul class="flex items-center justify-start">
+			<ul class="ml-2 flex items-center justify-start gap-2">
 				{#each leftItems as item}
 					<NavbarItem navbarItem={item} />
 				{/each}
@@ -20,7 +20,7 @@
 		</div>
 
 		<div>
-			<ul class="flex items-center justify-center">
+			<ul class="flex items-center justify-center gap-2">
 				{#each centerItems as item}
 					<NavbarItem navbarItem={item} />
 				{/each}
@@ -28,7 +28,7 @@
 		</div>
 
 		<div>
-			<ul class="flex items-center justify-end">
+			<ul class="mr-2 flex items-center justify-end gap-2">
 				{#each rightItems as item}
 					<NavbarItem navbarItem={item} />
 				{/each}
