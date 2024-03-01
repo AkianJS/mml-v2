@@ -5,6 +5,8 @@
 	import MoviesGrid from '../movies-grid/MoviesGrid.svelte';
 
 	export let data: PageData;
+	export let loadMore: () => void;
+	export let hasMore: boolean;
 
 	let { movie, images, videos } = data;
 
@@ -77,7 +79,7 @@
 
 	<!-- Recommendations section -->
 	<div class="mt-4">
-		<MoviesGrid data={data.recommendations} title="You can also watch" />
+		<MoviesGrid {hasMore} {loadMore} data={data.recommendations} title="You can also watch" />
 	</div>
 </section>
 

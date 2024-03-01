@@ -11,10 +11,11 @@ export function populateNavbarItemI(): NavbarItemI[] {
 			type: 'normal'
 		},
 		{
-			label: 'Genre',
+			label: 'Movies',
+			link: '/movies',
 			position: 'left',
 			order: 1,
-			type: 'component'
+			type: 'normal'
 		},
 		{
 			label: 'Trending',

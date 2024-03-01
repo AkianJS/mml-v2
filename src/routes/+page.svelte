@@ -3,6 +3,11 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	const hasMore = false;
+	const loadMore = () => {
+		return;
+	};
 </script>
 
-<MoviesGrid infiniteScroll={false} {data} title="Discover" />
+<MoviesGrid {hasMore} {loadMore} infiniteScroll={false} {data} title="Discover" />

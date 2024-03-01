@@ -6,8 +6,6 @@ import { getMovies } from '$lib/utils/movies-fetch';
 export const load: PageServerLoad<MovieI> = (async () => {
 	const data: MovieI = await getMovies('discover/movie');
 
-	data.results.splice(0, 10);
-
 	for (const movie of data.results) {
 		const detailData: MovieDetail = await getMovies(`movie/${movie.id}`, 'language=en-US');
 		movie.runtime = detailData.runtime;

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import MoviesGrid from '$lib/components/movies-grid/MoviesGrid.svelte';
-	import { getMoviesWithExtraInfo } from '$lib/utils/movies-fetch';
 	import { removeDuplicatesByKey } from '$lib/utils/library';
+	import { getMoviesWithExtraInfo } from '$lib/utils/movies-fetch';
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 	let hasMore = data.page < data.total_pages;
@@ -10,7 +10,7 @@
 	const loadMore = async () => {
 		let pageNumber = ++data.page;
 
-		const movies = await getMoviesWithExtraInfo('discover/movie', `page=${pageNumber}`);
+		const movies = await getMoviesWithExtraInfo('trending/movie/week', `page=${pageNumber}`);
 		data.page = movies.page;
 		data.total_pages = movies.total_pages;
 		const allTheMovies = [...data.results, ...movies.results];
@@ -19,4 +19,4 @@
 	};
 </script>
 
-<MoviesGrid title="All the movies" {loadMore} {hasMore} {data} />
+<MoviesGrid title="Trend on this week" {loadMore} {hasMore} {data} />
