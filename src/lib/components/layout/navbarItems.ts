@@ -60,5 +60,5 @@ export function populateNavbarItemI(): NavbarItemI[] {
 		}
 	];
 
-	return navbarItems.toSorted((a, b) => a.order - b.order);
+	return navbarItems;
 }
