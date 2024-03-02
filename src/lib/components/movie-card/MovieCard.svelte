@@ -100,12 +100,15 @@
 	on:mouseleave={animateCardLeave}
 	on:click={handleCardClicked}
 	href={`/movies/${movie.id}`}
-	class={`card-animation-${id} relative space-y-2 overflow-hidden`}
+	class={`card-animation-${id} relative w-96 space-y-2 overflow-hidden sm:w-[250px]`}
 >
-	<figure class="h-[140px] w-[250px] overflow-hidden rounded-2xl" bind:this={imageContainerRef}>
+	<figure
+		class="w-96 overflow-hidden rounded-2xl sm:h-[140px] sm:w-[250px]"
+		bind:this={imageContainerRef}
+	>
 		<img
 			bind:this={activeImageRef}
-			class="h-[140px] w-[250px] rounded-2xl object-cover"
+			class="w-96 rounded-2xl object-cover sm:h-[140px] sm:w-[250px]"
 			width="250"
 			height="140"
 			src={imageUrl}
@@ -114,7 +117,7 @@
 		<img
 			data-flip-id="movie-{movie.id}"
 			bind:this={hiddenImageRef}
-			class="movie-id absolute left-0 top-0 h-[140px] w-[250px] rounded-2xl object-cover opacity-0"
+			class="movie-id absolute left-0 top-0 w-96 rounded-2xl object-cover opacity-0 sm:h-[140px] sm:w-[250px]"
 			src={hiddenImage}
 			alt={movie.title}
 			width="250"

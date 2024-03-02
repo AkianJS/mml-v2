@@ -23,7 +23,13 @@
 
 <style lang="postcss">
 	section {
-		grid-template-columns: repeat(auto-fit, 250px);
-		justify-content: space-between;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
+
+	@media (max-width: 640px) {
+		section {
+			grid-template-columns: 1fr;
+			align-content: center;
+		}
 	}
 </style>

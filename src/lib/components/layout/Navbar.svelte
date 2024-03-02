@@ -10,7 +10,7 @@
 	const rightItems = navbarItems.filter((item) => item.position === 'right');
 </script>
 
-<nav class="h-16 w-full border-b border-b-gray-500 bg-primary">
+<nav class="sticky top-0 z-50 h-16 w-full border-b border-b-gray-500 bg-primary">
 	<div class="mx-auto flex h-full max-w-screen-2xl content-center items-center justify-between">
 		<div>
 			<ul class="ml-2 hidden items-center justify-start gap-4 md:flex">
