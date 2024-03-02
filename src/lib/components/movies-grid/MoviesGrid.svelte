@@ -29,7 +29,7 @@
 	@media (max-width: 640px) {
 		section {
 			grid-template-columns: 1fr;
-			align-content: center;
+			place-items: center;
 		}
 	}
 </style>

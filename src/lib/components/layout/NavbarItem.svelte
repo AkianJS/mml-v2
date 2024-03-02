@@ -1,13 +1,18 @@
 <script lang="ts">
-	import type { NavbarItemI } from './navbar.interface';
 	import Icon from '@iconify/svelte';
+	import type { NavbarItemI } from './navbar.interface';
 
 	export let navbarItem: NavbarItemI;
+	export let textSize = 'text-sm';
+	export let animationClass = '';
 </script>
 
-<li>
+<li class={animationClass}>
 	{#if navbarItem.link && navbarItem.type === 'normal'}
-		<a href={navbarItem.link} class="flex gap-2 text-sm text-white transition-all hover:scale-105">
+		<a
+			href={navbarItem.link}
+			class="flex gap-2 {textSize} text-white transition-all hover:scale-105"
+		>
 			{#if navbarItem.icon}
 				<span class="rounded-2xl bg-secondary p-2">
 					<Icon width={24} height={24} icon={navbarItem.icon} />

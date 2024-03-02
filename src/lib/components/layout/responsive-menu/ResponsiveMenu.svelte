@@ -7,28 +7,41 @@
 	let box: HTMLDivElement;
 	let background: HTMLDivElement;
 
-	export let navbarItem: NavbarItemI;
+	export let navbarItem: NavbarItemI[];
 
 	function toggleMenu() {
+		// Animation to open the menu
 		if (!isOpen) {
 			isOpen = true;
-			// Background animation
 			gsap.to(background, {
 				transformOrigin: 'center',
 				duration: 0.1,
 				scale: 100
 			});
-			// Box animation
 			gsap.to(box, {
 				duration: 0.3,
-				width: '50%',
+				width: window.innerWidth < 640 ? '75%' : '50%',
 				height: '100%',
 				top: 0,
 				left: 0
 			});
+			gsap.fromTo(
+				'.navbar-items-animation',
+				{
+					delay: 0.3,
+					y: 100,
+					opacity: 0
+				},
+				{
+					duration: 0.3,
+					y: 0,
+					opacity: 1,
+					stagger: 0.1
+				}
+			);
 		} else if (isOpen) {
+			// Animation to close the menu
 			isOpen = false;
-			// Box animation
 			gsap.to(box, {
 				delay: 0.3,
 				duration: 0,
@@ -36,7 +49,6 @@
 				height: '3rem',
 				transformOrigin: 'top left'
 			});
-			// Background animation
 			gsap.to(background, {
 				duration: 0.3,
 				scale: 1,
@@ -59,8 +71,14 @@
 		class="absolute left-2 top-4 z-20 h-8 w-8 rounded-full bg-secondary"
 		bind:this={background}
 	></div>
-	<ul class="absolute z-30 hidden h-full w-full items-center justify-center">
-		<NavbarItem {navbarItem} />
+	<ul
+		class:flex={isOpen}
+		class:hidden={!isOpen}
+		class="absolute z-30 h-full w-full flex-col items-center justify-center gap-4 text-2xl"
+	>
+		{#each navbarItem as item}
+			<NavbarItem animationClass="navbar-items-animation" textSize="text-2xl" navbarItem={item} />
+		{/each}
 	</ul>
 </div>
 

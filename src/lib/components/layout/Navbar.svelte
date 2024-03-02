@@ -19,7 +19,7 @@
 				{/each}
 			</ul>
 			<nav class="md:hidden">
-				<ResponsiveMenu navbarItem={leftItems[0]} />
+				<ResponsiveMenu navbarItem={leftItems} />
 			</nav>
 		</div>
 
