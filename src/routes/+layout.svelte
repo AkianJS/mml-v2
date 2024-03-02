@@ -14,15 +14,12 @@
 	});
 
 	afterNavigate(() => {
-		console.log('After', state);
-		Flip.from(state, { duration: 0.5, scale: true, targets: '.movie-id' });
+		if (state) Flip.from(state, { duration: 0.5, scale: true, targets: '.movie-id' });
 	});
 </script>
 
 <Navbar {navbarItems} />
-{#if state}
-	state {state}
-{/if}
+
 <main class="mx-auto max-w-screen-2xl p-4">
 	<slot />
 </main>
