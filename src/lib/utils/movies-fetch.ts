@@ -13,6 +13,7 @@ export async function getMoviesWithExtraInfo(url = '', params = '') {
 		const extraInfo = await getMovies(`movie/${movie.id}`);
 		movie.runtime = extraInfo.runtime;
 		movie.genres = extraInfo.genres;
+		movie.poster = extraInfo.poster_path;
 	}
 	return response;
 }

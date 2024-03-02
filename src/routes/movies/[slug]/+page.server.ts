@@ -1,9 +1,8 @@
-import { error } from '@sveltejs/kit';
-import { getMovies } from '$lib/utils/movies-fetch';
 import type { ImageInterface } from '$lib/interfaces/images.interface';
-import type { MovieDetail } from '$lib/interfaces/movie.interface';
+import type { MovieDetail, MovieI } from '$lib/interfaces/movie.interface';
+import { getMovies, getMoviesWithExtraInfo } from '$lib/utils/movies-fetch';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { MovieI } from '$lib/interfaces/movie.interface';
 
 type VideosType = {
 	results: {
@@ -24,13 +23,9 @@ export const load: PageServerLoad = (async ({ params }) => {
 
 	const videos: VideosType = await getMovies(`movie/${params.slug}/videos`);
 
-	const recommendations: MovieI = await getMovies(`movie/${params.slug}/recommendations`);
-
-	for (const movie of recommendations.results) {
-		const detailData: MovieDetail = await getMovies(`movie/${movie.id}`, 'language=en-US');
-		movie.runtime = detailData.runtime;
-		movie.genres = detailData.genres;
-	}
+	const recommendations: MovieI = await getMoviesWithExtraInfo(
+		`movie/${params.slug}/recommendations`
+	);
 
 	if (movie) {
 		return {

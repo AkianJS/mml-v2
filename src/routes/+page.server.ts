@@ -1,7 +1,9 @@
-import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
 import type { MovieDetail, MovieI } from '$lib/interfaces/movie.interface';
 import { getMovies } from '$lib/utils/movies-fetch';
+import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+
+export const prerender = true;
 
 export const load: PageServerLoad<MovieI> = (async () => {
 	const data: MovieI = await getMovies('discover/movie');
@@ -12,6 +14,7 @@ export const load: PageServerLoad<MovieI> = (async () => {
 		const detailData: MovieDetail = await getMovies(`movie/${movie.id}`, 'language=en-US');
 		movie.runtime = detailData.runtime;
 		movie.genres = detailData.genres;
+		movie.poster = detailData.poster_path;
 	}
 
 	if (data) return data;

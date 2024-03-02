@@ -1,7 +1,9 @@
 <script lang="ts">
-	import type { PageData } from '../../../routes/movies/[slug]/$types';
 	import placeholder from '$lib/assets/image-placeholder.png';
 	import Icon from '@iconify/svelte';
+	import gsap from 'gsap';
+	import { onMount } from 'svelte';
+	import type { PageData } from '../../../routes/movies/[slug]/$types';
 	import MoviesGrid from '../movies-grid/MoviesGrid.svelte';
 
 	export let data: PageData;
@@ -22,6 +24,17 @@
 	const trailer = videos.results?.filter((item) => {
 		return item.type.toLocaleLowerCase() === 'trailer';
 	});
+
+	onMount(() => {
+		gsap.from('.movie-details-animation', {
+			opacity: 0,
+			delay: 0.3,
+			y: 100,
+			stagger: 0.2,
+			duration: 0.5,
+			ease: 'circ'
+		});
+	});
 </script>
 
 <section class="min-h-screen w-full">
@@ -33,21 +46,28 @@
 	</div>
 	<main class="relative mb-8 flex flex-wrap gap-6 px-8 max-[1080px]:justify-center">
 		<div class="mt-8">
-			<img class="object-cover" width="320" height="480" src={posterImage} alt="Movie poster" />
+			<img
+				data-flip-id="movie-{movie.id}"
+				class="movie-id object-cover"
+				width="320"
+				height="480"
+				src={posterImage}
+				alt="Movie poster"
+			/>
 		</div>
 		<div class="my-8 min-w-[240px] max-w-lg space-y-3 text-start text-xl text-neutral-200">
 			{#if movie.title !== movie.original_title}
-				<p>
+				<p class="movie-details-animation">
 					<strong>Original Title: </strong>{movie.original_title}
 				</p>
 			{/if}
-			<h1><strong> Title: </strong>{movie.title}</h1>
-			<p><strong> Description: </strong>{movie.overview}</p>
-			<p><strong> Released: </strong>{movie.release_date}</p>
-			<p>
+			<h1 class="movie-details-animation"><strong> Title: </strong>{movie.title}</h1>
+			<p class="movie-details-animation"><strong> Description: </strong>{movie.overview}</p>
+			<p class="movie-details-animation"><strong> Released: </strong>{movie.release_date}</p>
+			<p class="movie-details-animation">
 				<strong>Genres: </strong>{movie.genres?.map((item) => item.name).join(', ')}
 			</p>
-			<p class="flex items-center gap-2">
+			<p class="movie-details-animation flex items-center gap-2">
 				<strong>Rating:</strong>
 				{movie.vote_average.toFixed(2)}
 				<span class="text-yellow-400">
@@ -58,10 +78,10 @@
 	</main>
 
 	{#if trailer.length}
-		<h2 class="text-center text-2xl font-bold">Trailer:</h2>
+		<h2 class="movie-details-animation text-center text-2xl font-bold">Trailer:</h2>
 
 		<article
-			class="relative z-[1] mx-auto my-8 h-[40vw] max-h-[420px] w-[60vw] min-w-[320px] max-w-[768px]"
+			class="movie-details-animation relative z-[1] mx-auto my-8 h-[40vw] max-h-[420px] w-[60vw] min-w-[320px] max-w-[768px]"
 		>
 			<iframe
 				class="absolute left-0 top-0 h-full w-full"
