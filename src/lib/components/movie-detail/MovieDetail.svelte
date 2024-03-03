@@ -38,8 +38,8 @@
 	});
 </script>
 
-<section class="min-h-screen w-full">
-	<div class="image2-container absolute right-0 top-16 opacity-70">
+<section class="h-full w-full overflow-auto px-4">
+	<div class="image2-container fixed right-0 top-16 -z-10 opacity-70">
 		<div
 			style={`background-image: url(${backdropImage})`}
 			class="image-container absolute right-0 top-0 bg-teal-800"

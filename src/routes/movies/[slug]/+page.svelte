@@ -30,6 +30,8 @@
 	<meta name="description" content={data.movie.overview} />
 </svelte:head>
 
-{#key data.movie.id}
-	<MovieDetail {hasMore} {loadMore} {data} />
-{/key}
+<div class="fixed bottom-0 left-0 right-0 top-16">
+	{#key data.movie.id}
+		<MovieDetail {hasMore} {loadMore} {data} />
+	{/key}
+</div>
