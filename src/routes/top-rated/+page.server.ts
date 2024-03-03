@@ -4,7 +4,10 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad<MovieI> = (async () => {
-	const data: MovieI = await getMoviesWithExtraInfo('movie/top_rated');
+	const data: MovieI = await getMoviesWithExtraInfo({
+		url: 'movie/top_rated',
+		fetch
+	});
 
 	if (data) return data;
 

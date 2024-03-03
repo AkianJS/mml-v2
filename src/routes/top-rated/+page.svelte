@@ -10,7 +10,11 @@
 	const loadMore = async () => {
 		let pageNumber = ++data.page;
 
-		const movies = await getMoviesWithExtraInfo('movie/top_rated', `page=${pageNumber}`);
+		const movies = await getMoviesWithExtraInfo({
+			url: 'movie/top_rated',
+			params: `page=${pageNumber}`,
+			fetch
+		});
 		data.page = movies.page;
 		data.total_pages = movies.total_pages;
 		const allTheMovies = [...data.results, ...movies.results];

@@ -48,7 +48,7 @@ export type MovieDetail = {
 	runtime?: number;
 };
 
-type Genre = {
+export type Genre = {
 	id: number;
 	name: string;
 };

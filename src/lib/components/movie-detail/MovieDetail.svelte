@@ -26,6 +26,7 @@
 	});
 
 	onMount(() => {
+		loadMore();
 		gsap.from('.movie-details-animation', {
 			opacity: 0,
 			delay: 0.3,
@@ -63,7 +64,7 @@
 			{/if}
 			<h1 class="movie-details-animation"><strong> Title: </strong>{movie.title}</h1>
 			<p class="movie-details-animation"><strong> Description: </strong>{movie.overview}</p>
-			<p class="movie-details-animation"><strong> Released: </strong>{movie.release_date}</p>
+			<p class="movie-details-animation"><strong> Release: </strong>{movie.release_date}</p>
 			<p class="movie-details-animation">
 				<strong>Genres: </strong>{movie.genres?.map((item) => item.name).join(', ')}
 			</p>
@@ -96,11 +97,12 @@
 	{/if}
 
 	<hr class="mx-[10%]" />
-
-	<!-- Recommendations section -->
-	<div class="mt-4">
-		<MoviesGrid {hasMore} {loadMore} data={data.recommendations} title="You can also watch" />
-	</div>
+	{#if data.recommendations?.results?.length > 0}
+		<!-- Recommendations section -->
+		<div class="mt-4">
+			<MoviesGrid {hasMore} {loadMore} data={data.recommendations} title="You can also watch" />
+		</div>
+	{/if}
 </section>
 
 <style>

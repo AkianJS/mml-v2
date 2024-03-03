@@ -3,8 +3,8 @@ import { getMoviesWithExtraInfo } from '$lib/utils/movies-fetch';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad<MovieI> = (async () => {
-	const data: MovieI = await getMoviesWithExtraInfo('trending/movie/week');
+export const load: PageServerLoad<MovieI> = (async ({ fetch }) => {
+	const data: MovieI = await getMoviesWithExtraInfo({ url: 'trending/movie/week', fetch });
 
 	if (data) return data;
 

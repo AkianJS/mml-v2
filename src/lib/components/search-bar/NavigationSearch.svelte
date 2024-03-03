@@ -1,15 +1,23 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
+
+	function onMovieSearch(event: Event) {
+		event.preventDefault();
+		const searchInput = (event.target as HTMLInputElement).value;
+		goto(`/movies?search=${searchInput}`);
+	}
 </script>
 
 <div class="flex items-center justify-center">
 	<div class="relative">
 		<input
+			on:keydown={(event) => event.key === 'Enter' && onMovieSearch(event)}
 			type="text"
 			class="focus:border-primary focus:ring-primary h-10 w-[40vw] min-w-20 max-w-80 rounded-2xl bg-secondary px-4 py-2 pl-10 text-sm text-gray-100 placeholder-gray-100 focus:outline-none focus:ring-1"
 			placeholder="Search for a movie"
 		/>
-		<button class="absolute left-2 top-2/4 -translate-y-2/4">
+		<button on:click={onMovieSearch} type="submit" class="absolute left-2 top-2/4 -translate-y-2/4">
 			<Icon icon="bi:search" width={24} class="text-gray-100" />
 		</button>
 	</div>

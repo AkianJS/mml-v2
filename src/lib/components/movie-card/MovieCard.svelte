@@ -16,18 +16,18 @@
 
 	const randNumber = Math.floor(Math.random() * 10);
 
-	const imageUrl = movie.backdrop_path
+	let imageUrl = movie.backdrop_path
 		? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
 		: placeholder;
-	const hiddenImage = movie.poster
-		? `https://image.tmdb.org/t/p/original${movie.poster}`
+	let hiddenImage = movie.poster_path
+		? `https://image.tmdb.org/t/p/original${movie.poster_path}`
 		: placeholder;
-	const genres = movie?.genres?.map((genre) => genre.name).join(', ');
-	const parsedRuntime = movie.runtime
+	let genres = movie?.genres?.map((genre) => genre.name).join(', ');
+	let parsedRuntime = movie.runtime
 		? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}mins`
 		: '';
 
-	const animation = (id: number) =>
+	let animation = (id: number) =>
 		gsap.fromTo(
 			`.card-animation-${id}`,
 			{
@@ -46,6 +46,19 @@
 	onMount(() => {
 		animation(id);
 	});
+
+	$: if (movie) {
+		imageUrl = movie.backdrop_path
+			? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+			: placeholder;
+		hiddenImage = movie.poster_path
+			? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+			: placeholder;
+		genres = movie?.genres?.map((genre) => genre.name).join(', ');
+		parsedRuntime = movie.runtime
+			? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}mins`
+			: '';
+	}
 
 	const animateCardEnter = () => {
 		tl = gsap

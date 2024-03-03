@@ -14,7 +14,7 @@
 	});
 
 	afterNavigate(() => {
-		if (state) Flip.from(state, { duration: 0.5, scale: true, targets: '.movie-id' });
+		if (state) Flip.from(state, { duration: 0.5, scale: false, targets: '.movie-id' });
 	});
 </script>
 
