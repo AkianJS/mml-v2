@@ -1,17 +1,13 @@
 import type { MovieDetail, MovieI } from '$lib/interfaces/movie.interface';
-import { getUrlParams } from '$lib/utils/library';
 import { getMovies } from '$lib/utils/movies-fetch';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const prerender = true;
 
-export const load: PageServerLoad<MovieI> = (async ({ url, fetch }) => {
-	const parameters = getUrlParams(url);
-
+export const load: PageServerLoad<MovieI> = (async ({ fetch }) => {
 	const data: MovieI = await getMovies({
 		url: 'discover/movie',
-		params: parameters,
 		fetch
 	});
 
