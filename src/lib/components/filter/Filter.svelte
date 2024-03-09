@@ -1,16 +1,21 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import type { Genre } from '$lib/interfaces/movie.interface';
 	import { filter } from '$lib/store/filter.store';
+	import { getMovies } from '$lib/utils/movies-fetch';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
+	import Chip from '../chip/Chip.svelte';
 
 	let filterRef: HTMLDivElement;
 	let filterButtonRef: HTMLButtonElement;
+	let genres: Genre[];
 
 	let isFilterOpen = false;
 	let isTopSelected = false;
 	let isAdultSelected = false;
+	let selectedGenre = 0;
 
 	// Array from year 1980 to current year
 	let years = Array.from(
@@ -21,7 +26,7 @@
 	years.unshift(0);
 
 	// Get the filter from the store
-	onMount(() => {
+	onMount(async () => {
 		window.addEventListener('click', (e) => {
 			if (
 				filterRef &&
@@ -31,24 +36,41 @@
 				isFilterOpen = false;
 			}
 		});
-		const isSearchActive = $page.url.searchParams.get('search');
 
-		if (isSearchActive) return;
+		const data = await getMovies({ url: 'genre/movie/list', fetch });
+
+		genres = data.genres;
+		genres.unshift({ id: 0, name: 'All' });
+
+		const searchParams = $page.url.searchParams;
+
+		const isSearchActive = searchParams.get('search');
+
+		if (isSearchActive) return (selectedGenre = 0);
+
+		const isGenreActive = searchParams.get('genre');
+
+		if (isGenreActive) filter.set({ ...$filter, genre: parseInt(isGenreActive) });
 
 		if ($filter.year) {
 			const yearIndex = years.indexOf(parseInt($filter.year));
 			years.splice(yearIndex, 1);
 			years.unshift(parseInt($filter.year));
 		}
-
-		isTopSelected = $filter.top === 'vote_average.desc';
-		isAdultSelected = $filter.adult === 'true';
 	});
 
 	const pushYearParams = (year: string) => {
-		const url = new URL(window.location.href);
+		const url = $page.url;
 		url.searchParams.set('year', year.toString());
 		filter.set({ ...$filter, year: year });
+		goto(url);
+	};
+
+	const pushGenreParams = (genreId: number) => {
+		const url = $page.url;
+		url.searchParams.set('genre', genreId.toString());
+		url.searchParams.delete('search');
+		filter.set({ ...$filter, genre: genreId });
 		goto(url);
 	};
 
@@ -81,13 +103,24 @@
 	};
 
 	filter.subscribe((value) => {
-		console.log('This suscribe', value);
+		selectedGenre = value.genre ?? 0;
 		isTopSelected = value.top === 'vote_average.desc';
 		isAdultSelected = value.adult === 'true';
 	});
 </script>
 
-<div class="relative flex items-center">
+<section class="mb-4 mt-8 flex flex-wrap gap-4">
+	{#if genres}
+		{#each genres as genre}
+			<Chip
+				active={selectedGenre === genre.id}
+				chip={{ label: genre.name, action: () => pushGenreParams(genre.id), icon: '' }}
+			/>
+		{/each}
+	{/if}
+</section>
+
+<div class="relative flex items-center justify-end">
 	<select
 		on:change={(e) => pushYearParams(e.currentTarget.value)}
 		class="rounded-2xl border-none bg-secondary px-4 py-1 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -117,8 +150,7 @@
 
 		<input checked={isAdultSelected} id="adult" bind:value={isAdultSelected} type="checkbox" />
 		<label for="adult">Include Adults?</label>
-		{isAdultSelected}
-		{isTopSelected}
+
 		<button
 			on:click={onFilterSearch}
 			class="font ml-auto mt-auto rounded-full bg-violet-800 p-2 duration-200 hover:scale-110"

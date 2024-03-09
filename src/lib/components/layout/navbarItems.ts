@@ -1,7 +1,10 @@
-import { getFiltersFromStore } from '$lib/utils/library';
 import NavigationSearch from '../search-bar/NavigationSearch.svelte';
 import type { NavbarItemI } from './navbar.interface';
-
+/**
+ * @name populateNavbarItemI
+ * @description Populate the navbar with items with previous defined structure
+ * @returns NavbarItemI[]
+ */
 export function populateNavbarItemI(): NavbarItemI[] {
 	const navbarItems: NavbarItemI[] = [
 		{
@@ -13,7 +16,7 @@ export function populateNavbarItemI(): NavbarItemI[] {
 		},
 		{
 			label: 'Movies',
-			link: `/movies?${getFiltersFromStore()}`,
+			link: '/movies',
 			position: 'left',
 			order: 1,
 			type: 'normal'
