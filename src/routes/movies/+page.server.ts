@@ -21,7 +21,11 @@ export const load: PageServerLoad<MovieI> = (async ({ url, fetch }) => {
 		throw error(404, 'Failed to load data');
 	} else {
 		const params = getUrlParams(url);
-		const data: MovieI = await getMoviesWithExtraInfo({ url: 'discover/movie', params, fetch });
+		const data: MovieI = await getMoviesWithExtraInfo({
+			url: 'discover/movie',
+			params: 'vote_count.gte=50&vote_count.lte=1000000&' + params,
+			fetch
+		});
 
 		if (data) return data;
 

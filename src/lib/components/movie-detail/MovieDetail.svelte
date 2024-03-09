@@ -10,7 +10,7 @@
 	export let loadMore: () => void;
 	export let hasMore: boolean;
 
-	let { movie, images, videos } = data;
+	let { movie, images } = data;
 
 	const backdropImage =
 		images.backdrops.length > 0
@@ -20,10 +20,6 @@
 		images.posters.length > 0
 			? `https://image.tmdb.org/t/p/original${images.posters[0].file_path}`
 			: placeholder;
-
-	const trailer = videos.results?.filter((item) => {
-		return item.type.toLocaleLowerCase() === 'trailer';
-	});
 
 	onMount(() => {
 		loadMore();
@@ -78,29 +74,42 @@
 		</div>
 	</main>
 
-	{#if trailer.length}
-		<h2 class="movie-details-animation text-center text-2xl font-bold">Trailer:</h2>
+	{#await data.streamed.videos}
+		<div class="mt-4 flex items-center justify-center">
+			<Icon width={54} icon="svg-spinners:12-dots-scale-rotate" />
+		</div>
+	{:then video}
+		{@const trailer = video.results?.filter((item) => {
+			return item.type.toLocaleLowerCase() === 'trailer';
+		})}
+		{#if trailer.length}
+			<h2 class="movie-details-animation text-center text-2xl font-bold">Trailer:</h2>
 
-		<article
-			class="movie-details-animation relative z-[1] mx-auto my-8 h-[40vw] max-h-[420px] w-[60vw] min-w-[320px] max-w-[768px]"
-		>
-			<iframe
-				class="absolute left-0 top-0 h-full w-full"
-				allowfullscreen
-				title={movie.title}
-				width="100%"
-				height="100%"
-				src={'https://www.youtube.com/embed/' + trailer[0].key}
-				frameborder="0"
-			/>
-		</article>
-	{/if}
+			<article
+				class="movie-details-animation relative z-[1] mx-auto my-8 h-[40vw] max-h-[420px] w-[60vw] min-w-[320px] max-w-[768px]"
+			>
+				<iframe
+					class="absolute left-0 top-0 h-full w-full"
+					allowfullscreen
+					title={movie.title}
+					width="100%"
+					height="100%"
+					src={'https://www.youtube.com/embed/' + trailer[0].key}
+					frameborder="0"
+				/>
+			</article>
+		{/if}
+	{/await}
 
 	<hr class="mx-[10%]" />
-	{#if data.recommendations?.results?.length > 0}
+	{#if data.recommendations?.results?.length}
 		<!-- Recommendations section -->
 		<div class="mt-4">
 			<MoviesGrid {hasMore} {loadMore} data={data.recommendations} title="You can also watch" />
+		</div>
+	{:else}
+		<div class="mt-4 flex items-center justify-center">
+			<Icon width={54} icon="svg-spinners:12-dots-scale-rotate" />
 		</div>
 	{/if}
 </section>

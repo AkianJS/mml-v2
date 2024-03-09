@@ -1,3 +1,4 @@
+import { getFiltersFromStore } from '$lib/utils/library';
 import NavigationSearch from '../search-bar/NavigationSearch.svelte';
 import type { NavbarItemI } from './navbar.interface';
 
@@ -12,7 +13,7 @@ export function populateNavbarItemI(): NavbarItemI[] {
 		},
 		{
 			label: 'Movies',
-			link: '/movies',
+			link: `/movies?${getFiltersFromStore()}`,
 			position: 'left',
 			order: 1,
 			type: 'normal'

@@ -23,4 +23,6 @@
 	};
 </script>
 
-<MoviesGrid title="They are coming!" {loadMore} {hasMore} {data} />
+<div class="mt-8">
+	<MoviesGrid title="They are coming!" {loadMore} {hasMore} {data} />
+</div>

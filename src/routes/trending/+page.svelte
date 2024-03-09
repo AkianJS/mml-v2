@@ -10,7 +10,11 @@
 	const loadMore = async () => {
 		let pageNumber = ++data.page;
 
-		const movies = await getMoviesWithExtraInfo('trending/movie/week', `page=${pageNumber}`);
+		const movies = await getMoviesWithExtraInfo({
+			url: 'trending/movie/week',
+			params: `page=${pageNumber}`,
+			fetch
+		});
 		data.page = movies.page;
 		data.total_pages = movies.total_pages;
 		const allTheMovies = [...data.results, ...movies.results];
@@ -19,4 +23,6 @@
 	};
 </script>
 
-<MoviesGrid title="Trend on this week" {loadMore} {hasMore} {data} />
+<div class="mt-8">
+	<MoviesGrid title="Trend on this week" {loadMore} {hasMore} {data} />
+</div>

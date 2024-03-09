@@ -1,6 +1,6 @@
 <script lang="ts">
 	import placeholder from '$lib/assets/image-placeholder.png';
-	import type { Movie } from '$lib/interfaces/movie.interface';
+	import type { Genre, Movie } from '$lib/interfaces/movie.interface';
 	import Icon from '@iconify/svelte';
 	import gsap from 'gsap';
 	import { onMount } from 'svelte';
@@ -16,16 +16,21 @@
 
 	const randNumber = Math.floor(Math.random() * 10);
 
-	let imageUrl = movie.backdrop_path
-		? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
-		: placeholder;
-	let hiddenImage = movie.poster_path
-		? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-		: placeholder;
-	let genres = movie?.genres?.map((genre) => genre.name).join(', ');
-	let parsedRuntime = movie.runtime
-		? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}mins`
-		: '';
+	function getImageUrl(backdrop_path?: string) {
+		return backdrop_path ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : placeholder;
+	}
+
+	function getHiddenImageUrl(poster_path?: string) {
+		return poster_path ? `https://image.tmdb.org/t/p/original${movie.poster_path}` : placeholder;
+	}
+
+	function getGenres(genres?: Genre[]) {
+		return genres?.map((genre) => genre.name).join(', ');
+	}
+
+	function getRuntime(runtime?: number) {
+		return runtime ? `${Math.floor(runtime / 60)}h ${runtime % 60}mins` : '';
+	}
 
 	let animation = (id: number) =>
 		gsap.fromTo(
@@ -46,19 +51,6 @@
 	onMount(() => {
 		animation(id);
 	});
-
-	$: if (movie) {
-		imageUrl = movie.backdrop_path
-			? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
-			: placeholder;
-		hiddenImage = movie.poster_path
-			? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-			: placeholder;
-		genres = movie?.genres?.map((genre) => genre.name).join(', ');
-		parsedRuntime = movie.runtime
-			? `${Math.floor(movie?.runtime / 60)}h ${movie?.runtime % 60}mins`
-			: '';
-	}
 
 	const animateCardEnter = () => {
 		tl = gsap
@@ -124,21 +116,21 @@
 			class="w-96 rounded-2xl object-cover sm:h-[140px] sm:w-[250px]"
 			width="250"
 			height="140"
-			src={imageUrl}
+			src={getImageUrl(movie.backdrop_path)}
 			alt={movie.title}
 		/>
 		<img
 			data-flip-id="movie-{movie.id}"
 			bind:this={hiddenImageRef}
 			class="movie-id absolute left-0 top-0 w-96 rounded-2xl object-cover opacity-0 sm:h-[140px] sm:w-[250px]"
-			src={hiddenImage}
+			src={getHiddenImageUrl(movie.poster_path)}
 			alt={movie.title}
 			width="250"
 			height="140"
 		/>
 	</figure>
 	<h2 class="font-semibold">{movie.title}</h2>
-	<p>{parsedRuntime} · {genres}</p>
+	<p>{getRuntime(movie?.runtime)} · {getGenres(movie.genres)}</p>
 	<p class="absolute right-2 top-0 flex items-center gap-x-2">
 		{movie.vote_average?.toFixed(2)}
 		<Icon icon="bi:star-fill" width={24} class="text-yellow-400" />

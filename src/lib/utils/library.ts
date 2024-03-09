@@ -1,5 +1,6 @@
 //  Create a function to remove from array of objects based on a key
 
+import { filter, type FilterI } from '$lib/store/filter.store';
 import { PARAM_PARSER } from './const';
 
 export function removeDuplicatesByKey<T extends Record<string, unknown>>(
@@ -17,4 +18,18 @@ export function getUrlParams(url: URL): string {
 	});
 
 	return parameters;
+}
+
+export function getFiltersFromStore() {
+	let filters = '';
+
+	filter.subscribe((value: FilterI) => {
+		Object.keys(value).forEach((key: string) => {
+			if (key in value && value[key as keyof FilterI] !== undefined) {
+				filters += `${key}=${value[key as keyof FilterI]}&`;
+			}
+		});
+	});
+
+	return filters;
 }

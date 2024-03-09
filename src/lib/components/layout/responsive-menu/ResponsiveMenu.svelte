@@ -1,13 +1,34 @@
 <script lang="ts">
 	import gsap from 'gsap';
+	import { onMount } from 'svelte';
 	import NavbarItem from '../NavbarItem.svelte';
 	import type { NavbarItemI } from '../navbar.interface';
 
 	let isOpen = false;
-	let box: HTMLDivElement;
+	let boxRef: HTMLDivElement;
+	let menuButtonRef: HTMLButtonElement;
 	let background: HTMLDivElement;
 
 	export let navbarItem: NavbarItemI[];
+
+	onMount(() => {
+		// Close the menu when the user clicks outside of it
+		window.addEventListener('click', (e) => {
+			if (
+				isOpen &&
+				!menuButtonRef?.contains(e.target as Node) &&
+				!boxRef?.contains(e.target as Node)
+			) {
+				toggleMenu();
+			}
+		});
+
+		navbarItem.forEach((item) => {
+			item.action = () => {
+				if (isOpen) toggleMenu();
+			};
+		});
+	});
 
 	function toggleMenu() {
 		// Animation to open the menu
@@ -18,7 +39,7 @@
 				duration: 0.1,
 				scale: 100
 			});
-			gsap.to(box, {
+			gsap.to(boxRef, {
 				duration: 0.3,
 				width: window.innerWidth < 640 ? '75%' : '50%',
 				height: '100%',
@@ -42,7 +63,7 @@
 		} else if (isOpen) {
 			// Animation to close the menu
 			isOpen = false;
-			gsap.to(box, {
+			gsap.to(boxRef, {
 				delay: 0.3,
 				duration: 0,
 				width: '3rem',
@@ -59,6 +80,7 @@
 </script>
 
 <button
+	bind:this={menuButtonRef}
 	class="relative left-2 z-30 flex h-12 w-8 flex-col items-center justify-center gap-1 p-1 text-black"
 	on:click={toggleMenu}
 >
@@ -66,7 +88,10 @@
 	<div class:open={isOpen} class="burger"></div>
 	<div class:open={isOpen} class="burger"></div>
 </button>
-<div bind:this={box} class="fixed left-0 top-0 z-10 h-14 w-12 overflow-hidden">
+<div
+	bind:this={boxRef}
+	class="fixed left-0 top-0 z-10 h-14 w-12 overflow-hidden shadow-2xl shadow-black"
+>
 	<div
 		class="absolute left-2 top-4 z-20 h-8 w-8 rounded-full bg-secondary"
 		bind:this={background}

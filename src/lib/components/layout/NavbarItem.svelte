@@ -11,6 +11,7 @@
 	{#if navbarItem.link && navbarItem.type === 'normal'}
 		<a
 			href={navbarItem.link}
+			on:click={navbarItem.action}
 			class="flex gap-2 {textSize} text-white transition-all hover:scale-105"
 		>
 			{#if navbarItem.icon}

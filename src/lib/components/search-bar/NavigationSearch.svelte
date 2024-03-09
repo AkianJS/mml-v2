@@ -2,9 +2,10 @@
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 
-	function onMovieSearch(event: Event) {
-		event.preventDefault();
-		const searchInput = (event.target as HTMLInputElement).value;
+	let value = '';
+
+	function onMovieSearch() {
+		const searchInput = value;
 		goto(`/movies?search=${searchInput}`);
 	}
 </script>
@@ -12,7 +13,8 @@
 <div class="flex items-center justify-center">
 	<div class="relative">
 		<input
-			on:keydown={(event) => event.key === 'Enter' && onMovieSearch(event)}
+			bind:value
+			on:keydown={(event) => event.key === 'Enter' && onMovieSearch()}
 			type="text"
 			class="focus:border-primary focus:ring-primary h-10 w-[40vw] min-w-20 max-w-80 rounded-2xl bg-secondary px-4 py-2 pl-10 text-sm text-gray-100 placeholder-gray-100 focus:outline-none focus:ring-1"
 			placeholder="Search for a movie"

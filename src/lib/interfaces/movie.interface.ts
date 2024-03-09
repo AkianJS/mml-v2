@@ -21,6 +21,7 @@ export type Movie = {
 	id: number;
 	poster?: string;
 	runtime?: number;
+	trailer?: string;
 };
 
 export type MovieDetail = {
@@ -59,3 +60,11 @@ type ProductionCompanies = {
 	name: string;
 	origin_country: string;
 };
+
+export interface VideosType {
+	results: {
+		type: string;
+		site: string;
+		key: string;
+	}[];
+}

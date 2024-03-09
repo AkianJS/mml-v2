@@ -1,17 +1,9 @@
 import type { ImageInterface } from '$lib/interfaces/images.interface';
-import type { MovieDetail, MovieI } from '$lib/interfaces/movie.interface';
+import type { MovieDetail, MovieI, VideosType } from '$lib/interfaces/movie.interface';
 import { getMovies } from '$lib/utils/movies-fetch';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 ('$lib/interfaces/movie.interface');
-
-type VideosType = {
-	results: {
-		type: string;
-		site: string;
-		key: string;
-	}[];
-};
 
 export const load: PageServerLoad = (async ({ params, fetch }) => {
 	let movie: MovieDetail = await getMovies({
@@ -26,13 +18,16 @@ export const load: PageServerLoad = (async ({ params, fetch }) => {
 
 	const images: ImageInterface = await getMovies({ url: `movie/${params.slug}/images`, fetch });
 
-	const videos: VideosType = await getMovies({ url: `movie/${params.slug}/videos`, fetch });
+	const videos: Promise<VideosType> = getMovies({ url: `movie/${params.slug}/videos`, fetch });
 
 	if (movie) {
 		return {
 			movie,
 			images,
 			videos,
+			streamed: {
+				videos
+			},
 			recommendations: {
 				page: 0,
 				total_pages: 2,
