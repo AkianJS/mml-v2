@@ -56,11 +56,11 @@
 
 			if (isGenreActive) filter.set({ ...$filter, genre: parseInt(isGenreActive) });
 			if (isTopActive) {
-				filter.set({ ...$filter, top: isTopActive });
+				filter.set({ ...$filter, top: isTopActive === 'true' });
 				isTopSelected = true;
 			}
 			if (isAdultActive) {
-				filter.set({ ...$filter, adult: isAdultActive });
+				filter.set({ ...$filter, adult: isAdultActive === 'true' });
 				isAdultSelected = true;
 			}
 			if (isYearActive) {
@@ -96,23 +96,8 @@
 
 	const onFilterSearch = () => {
 		const url = $page.url;
-		if (isTopSelected && isAdultSelected) {
-			url.searchParams.set('top', 'vote_average.desc');
-			url.searchParams.set('adult', 'true');
-			filter.set({ ...$filter, top: 'vote_average.desc', adult: 'true' });
-		} else if (isTopSelected) {
-			url.searchParams.set('top', 'vote_average.desc');
-			url.searchParams.delete('adult');
-			filter.set({ ...$filter, top: 'vote_average.desc', adult: undefined });
-		} else if (isAdultSelected) {
-			url.searchParams.set('adult', 'true');
-			url.searchParams.delete('top');
-			filter.set({ ...$filter, top: undefined, adult: 'true' });
-		} else {
-			url.searchParams.delete('top');
-			url.searchParams.delete('adult');
-			filter.set({ ...$filter, top: undefined, adult: undefined });
-		}
+		url.searchParams.set('top', $filter.top.toString());
+		url.searchParams.set('adult', $filter.adult.toString());
 		url.searchParams.delete('search');
 
 		goto(url, {
@@ -162,13 +147,12 @@
 		class:scale-100={isFilterOpen}
 		class="checkbox absolute right-6 top-10 z-10 flex h-48 w-56 origin-top-right scale-0 flex-col gap-2 rounded-2xl bg-secondary p-4 shadow-2xl shadow-black duration-300 ease-linear"
 	>
-		<input id="top" bind:checked={isTopSelected} type="checkbox" />
+		<input id="top" bind:checked={$filter.top} type="checkbox" />
 		<label for="top">Top Rated?</label>
 
-		<input id="adult" bind:checked={isAdultSelected} type="checkbox" />
+		<input id="adult" bind:checked={$filter.adult} type="checkbox" />
 		<label for="adult">Include Adults?</label>
-		{isTopSelected}
-		{isAdultSelected}
+
 		<button
 			on:click={onFilterSearch}
 			class="font ml-auto mt-auto rounded-full bg-violet-800 p-2 duration-200 hover:scale-110"

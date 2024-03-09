@@ -1,7 +1,7 @@
 //  Create a function to remove from array of objects based on a key
 
 import { filter, type FilterI } from '$lib/store/filter.store';
-import { PARAM_PARSER } from './const';
+import { PARAM_KEY_PARSER } from './const';
 
 export function removeDuplicatesByKey<T extends Record<string, unknown>>(
 	arr: T[],
@@ -14,7 +14,10 @@ export function getUrlParams(url: URL): string {
 	let parameters = '';
 
 	url.searchParams.forEach((value, key) => {
-		parameters += `${PARAM_PARSER[key]}=${value}&`;
+		if (key === 'top' && value === 'true') value = `vote_average.desc`;
+		if (key === 'adult' && value === 'true') value = 'true';
+		if (key === 'genre' && value === '0') value = '';
+		parameters += `${PARAM_KEY_PARSER[key]}=${value}&`;
 	});
 
 	return parameters;

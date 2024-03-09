@@ -1,10 +1,10 @@
 import { writable } from 'svelte/store';
 
 export interface FilterI {
-	top?: string;
+	top: boolean;
 	year?: number;
 	genre?: number;
-	adult?: string;
+	adult: boolean;
 }
 /**
  * @description Initial values for the filter store
@@ -15,10 +15,10 @@ export interface FilterI {
  * @default { top: undefined, year: undefined, genre: undefined, adult: undefined }
  */
 export const filterInitialValues: FilterI = {
-	top: undefined,
+	top: false,
 	year: undefined,
 	genre: undefined,
-	adult: undefined
+	adult: false
 };
 
 /**
