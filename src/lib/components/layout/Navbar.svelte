@@ -16,7 +16,6 @@
 			if (item.link?.includes('movies')) {
 				let newLink = getFiltersFromStore();
 				item.link = `/movies?${newLink}`;
-				console.log('item.link', item.link);
 			}
 			return item;
 		});
