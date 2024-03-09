@@ -73,7 +73,7 @@
 	const pushYearParams = (year: number) => {
 		const url = $page.url;
 		url.searchParams.set('year', year.toString());
-		filter.set({ ...$filter, year: year });
+		filter.set({ year, ...$filter });
 		url.searchParams.delete('search');
 		goto(url, {
 			invalidateAll: true
@@ -105,8 +105,11 @@
 		});
 	};
 
-	$: selectedGenre = $filter.genre ?? 0;
-	$: selectedYear = $filter.year ?? 0;
+	filter.subscribe((value) => {
+		selectedGenre = value.genre ?? 0;
+		selectedYear = value.year ?? 0;
+		console.log('selected Year', selectedYear);
+	});
 </script>
 
 <section class="mb-4 mt-8 flex flex-wrap gap-4">
@@ -123,14 +126,18 @@
 
 <div class="relative flex items-center justify-end">
 	<select
-		bind:value={selectedYear}
+		bind:value={$filter.year}
 		on:change={(e) => pushYearParams(parseInt(e.currentTarget.value))}
 		class="rounded-2xl border-none bg-secondary px-4 py-1 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
 		name="year"
 		id="year"
 	>
 		{#each years as year}
-			<option class="bg-gray-700" value={year}>{year === 0 ? 'All' : year}</option>
+			<option
+				on:click={(e) => pushYearParams(parseInt(e.currentTarget.value))}
+				class="bg-gray-700"
+				value={year}>{year === 0 ? 'All' : year}</option
+			>
 		{/each}
 	</select>
 
