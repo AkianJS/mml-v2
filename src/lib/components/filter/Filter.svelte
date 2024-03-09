@@ -16,6 +16,7 @@
 	let isTopSelected = false;
 	let isAdultSelected = false;
 	let selectedGenre = 0;
+	let selectedYear = 0;
 
 	// Array from year 1980 to current year
 	let years = Array.from(
@@ -46,24 +47,37 @@
 
 		const isSearchActive = searchParams.get('search');
 
-		if (isSearchActive) return (selectedGenre = 0);
+		if (isSearchActive) selectedGenre = 0;
+		else {
+			const isGenreActive = searchParams.get('genre');
+			const isTopActive = searchParams.get('top');
+			const isAdultActive = searchParams.get('adult');
+			const isYearActive = searchParams.get('year');
 
-		const isGenreActive = searchParams.get('genre');
-
-		if (isGenreActive) filter.set({ ...$filter, genre: parseInt(isGenreActive) });
-
-		if ($filter.year) {
-			const yearIndex = years.indexOf(parseInt($filter.year));
-			years.splice(yearIndex, 1);
-			years.unshift(parseInt($filter.year));
+			if (isGenreActive) filter.set({ ...$filter, genre: parseInt(isGenreActive) });
+			if (isTopActive) {
+				filter.set({ ...$filter, top: isTopActive });
+				isTopSelected = true;
+			}
+			if (isAdultActive) {
+				filter.set({ ...$filter, adult: isAdultActive });
+				isAdultSelected = true;
+			}
+			if (isYearActive) {
+				selectedYear = parseInt(isYearActive);
+				filter.set({ ...$filter, year: parseInt(isYearActive) });
+			}
 		}
 	});
 
-	const pushYearParams = (year: string) => {
+	const pushYearParams = (year: number) => {
 		const url = $page.url;
 		url.searchParams.set('year', year.toString());
 		filter.set({ ...$filter, year: year });
-		goto(url);
+		url.searchParams.delete('search');
+		goto(url, {
+			invalidateAll: true
+		});
 	};
 
 	const pushGenreParams = (genreId: number) => {
@@ -71,7 +85,9 @@
 		url.searchParams.set('genre', genreId.toString());
 		url.searchParams.delete('search');
 		filter.set({ ...$filter, genre: genreId });
-		goto(url);
+		goto(url, {
+			invalidateAll: true
+		});
 	};
 
 	const toggleFilter = () => {
@@ -79,7 +95,7 @@
 	};
 
 	const onFilterSearch = () => {
-		const url = new URL(window.location.href);
+		const url = $page.url;
 		if (isTopSelected && isAdultSelected) {
 			url.searchParams.set('top', 'vote_average.desc');
 			url.searchParams.set('adult', 'true');
@@ -99,21 +115,21 @@
 		}
 		url.searchParams.delete('search');
 
-		goto(url);
+		goto(url, {
+			invalidateAll: true
+		});
 	};
 
-	filter.subscribe((value) => {
-		selectedGenre = value.genre ?? 0;
-		isTopSelected = value.top === 'vote_average.desc';
-		isAdultSelected = value.adult === 'true';
-	});
+	$: selectedGenre = $filter.genre ?? 0;
+	$: selectedYear = $filter.year ?? 0;
 </script>
 
 <section class="mb-4 mt-8 flex flex-wrap gap-4">
 	{#if genres}
 		{#each genres as genre}
+			{@const selected = selectedGenre === genre.id}
 			<Chip
-				active={selectedGenre === genre.id}
+				active={selected}
 				chip={{ label: genre.name, action: () => pushGenreParams(genre.id), icon: '' }}
 			/>
 		{/each}
@@ -122,7 +138,8 @@
 
 <div class="relative flex items-center justify-end">
 	<select
-		on:change={(e) => pushYearParams(e.currentTarget.value)}
+		bind:value={selectedYear}
+		on:change={(e) => pushYearParams(parseInt(e.currentTarget.value))}
 		class="rounded-2xl border-none bg-secondary px-4 py-1 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
 		name="year"
 		id="year"
@@ -145,12 +162,13 @@
 		class:scale-100={isFilterOpen}
 		class="checkbox absolute right-6 top-10 z-10 flex h-48 w-56 origin-top-right scale-0 flex-col gap-2 rounded-2xl bg-secondary p-4 shadow-2xl shadow-black duration-300 ease-linear"
 	>
-		<input checked={isTopSelected} id="top" bind:value={isTopSelected} type="checkbox" />
+		<input id="top" bind:checked={isTopSelected} type="checkbox" />
 		<label for="top">Top Rated?</label>
 
-		<input checked={isAdultSelected} id="adult" bind:value={isAdultSelected} type="checkbox" />
+		<input id="adult" bind:checked={isAdultSelected} type="checkbox" />
 		<label for="adult">Include Adults?</label>
-
+		{isTopSelected}
+		{isAdultSelected}
 		<button
 			on:click={onFilterSearch}
 			class="font ml-auto mt-auto rounded-full bg-violet-800 p-2 duration-200 hover:scale-110"

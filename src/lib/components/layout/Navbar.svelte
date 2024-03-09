@@ -1,13 +1,27 @@
 <script lang="ts">
+	import { filter } from '$lib/store/filter.store';
+	import { getFiltersFromStore } from '$lib/utils/library';
 	import NavbarItem from './NavbarItem.svelte';
 	import type { NavbarItemI } from './navbar.interface';
 	import ResponsiveMenu from './responsive-menu/ResponsiveMenu.svelte';
 
 	export let navbarItems: NavbarItemI[] = [];
 
-	const leftItems = navbarItems.filter((item) => item.position === 'left');
+	let leftItems = navbarItems.filter((item) => item.position === 'left');
 	const centerItems = navbarItems.filter((item) => item.position === 'center');
 	const rightItems = navbarItems.filter((item) => item.position === 'right');
+
+	filter.subscribe((value) => {
+		let newLeftItem = leftItems.map((item) => {
+			if (item.link?.includes('movies')) {
+				let newLink = getFiltersFromStore();
+				item.link = `/movies?${newLink}`;
+				console.log('item.link', item.link);
+			}
+			return item;
+		});
+		leftItems = newLeftItem; // assign the new array to leftItems
+	});
 </script>
 
 <nav class="sticky top-0 z-50 h-16 w-full border-b border-b-gray-500 bg-primary">
@@ -15,7 +29,9 @@
 		<div>
 			<ul class="ml-2 hidden items-center justify-start gap-4 md:flex">
 				{#each leftItems as item}
-					<NavbarItem navbarItem={item} />
+					{#key leftItems}
+						<NavbarItem navbarItem={item} />
+					{/key}
 				{/each}
 			</ul>
 			<nav class="md:hidden">

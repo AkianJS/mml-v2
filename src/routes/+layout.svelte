@@ -1,10 +1,7 @@
 <script lang="ts">
-	import { afterNavigate, beforeNavigate, pushState } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import Navbar from '$lib/components/layout/Navbar.svelte';
 	import { populateNavbarItemI } from '$lib/components/layout/navbarItems';
-	import { filter, initialValues, link$ } from '$lib/store/filter.store';
-	import { getFiltersFromStore } from '$lib/utils/library';
 	import { Flip } from '$lib/utils/scripts';
 	import '../app.css';
 
@@ -14,21 +11,6 @@
 
 	beforeNavigate(() => {
 		state = Flip.getState('.movie-id');
-		// If the user is navigating to the movies page, we need to check if the user is searching for a movie
-		link$.subscribe((link) => {
-			if (link === '/movies') {
-				const searchParams = $page.url.searchParams.get('search');
-
-				if (searchParams) {
-					filter.set(initialValues);
-				}
-
-				const filters = getFiltersFromStore();
-				if (filters) {
-					pushState(`/movies?${filters}`, {});
-				}
-			}
-		});
 	});
 
 	afterNavigate(() => {

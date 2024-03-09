@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { link$ } from '$lib/store/filter.store';
 	import gsap from 'gsap';
 	import { onMount } from 'svelte';
 	import NavbarItem from '../NavbarItem.svelte';
@@ -13,7 +12,6 @@
 	export let navbarItem: NavbarItemI[];
 
 	onMount(() => {
-		console.log('created');
 		// Close the menu when the user clicks outside of it
 		window.addEventListener('click', (e) => {
 			if (
@@ -27,7 +25,6 @@
 
 		navbarItem.forEach((item) => {
 			item.action = () => {
-				link$.set(item.link ?? '');
 				if (isOpen) toggleMenu();
 			};
 		});

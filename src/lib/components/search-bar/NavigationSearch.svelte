@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { filter, filterInitialValues } from '$lib/store/filter.store';
 	import Icon from '@iconify/svelte';
 
 	let value = '';
 
 	function onMovieSearch() {
-		const searchInput = value;
-		goto(`/movies?search=${searchInput}`);
+		filter.set(filterInitialValues);
+		goto(`/movies?search=${value}`);
+		value = '';
 	}
 </script>
 

@@ -2,11 +2,11 @@ import type { MovieI } from '$lib/interfaces/movie.interface';
 import { getUrlParams } from '$lib/utils/library';
 import { getMoviesWithExtraInfo } from '$lib/utils/movies-fetch';
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 
 export const prerender = false;
 
-export const load: PageServerLoad<MovieI> = (async ({ url, fetch }) => {
+export const load: PageLoad<MovieI> = (async ({ url, fetch }) => {
 	const search = url.searchParams.get('search');
 
 	if (search) {
@@ -21,6 +21,7 @@ export const load: PageServerLoad<MovieI> = (async ({ url, fetch }) => {
 		throw error(404, 'Failed to load data');
 	} else {
 		const params = getUrlParams(url);
+
 		const data: MovieI = await getMoviesWithExtraInfo({
 			url: 'discover/movie',
 			params: 'vote_count.gte=50&vote_count.lte=1000000&' + params,
@@ -31,4 +32,4 @@ export const load: PageServerLoad<MovieI> = (async ({ url, fetch }) => {
 
 		throw error(404, 'Failed to load data');
 	}
-}) satisfies PageServerLoad<MovieI>;
+}) satisfies PageLoad<MovieI>;

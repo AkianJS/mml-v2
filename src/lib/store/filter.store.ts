@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 
 export interface FilterI {
 	top?: string;
-	year?: string;
+	year?: number;
 	genre?: number;
 	adult?: string;
 }
@@ -14,7 +14,7 @@ export interface FilterI {
  * @property {string} adult - Adult filter
  * @default { top: undefined, year: undefined, genre: undefined, adult: undefined }
  */
-export const initialValues: FilterI = {
+export const filterInitialValues: FilterI = {
 	top: undefined,
 	year: undefined,
 	genre: undefined,
@@ -24,9 +24,4 @@ export const initialValues: FilterI = {
 /**
  * @description Store to manage the filter
  */
-export const filter = writable<FilterI>(initialValues);
-
-/**
- * @description Store to manage the link
- */
-export const link$ = writable<string>('');
+export const filter = writable<FilterI>(filterInitialValues);
