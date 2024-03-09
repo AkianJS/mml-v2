@@ -11,6 +11,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Home</title>
+	<meta name="description" content="Discover new movies." />
+</svelte:head>
+
 <div class="mt-8">
 	<MoviesGrid {hasMore} {loadMore} infiniteScroll={false} data={data.data} title="Discover" />
 </div>

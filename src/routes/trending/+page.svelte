@@ -23,6 +23,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Trending</title>
+	<meta name="description" content="Movies that are trending this week." />
+</svelte:head>
+
 <div class="mt-8">
 	<MoviesGrid title="Trend on this week" {loadMore} {hasMore} {data} />
 </div>

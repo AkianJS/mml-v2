@@ -23,6 +23,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Coming Soon</title>
+	<meta name="description" content="Movies that are coming soon to the theaters." />
+</svelte:head>
+
 <div class="mt-8">
 	<MoviesGrid title="They are coming!" {loadMore} {hasMore} {data} />
 </div>

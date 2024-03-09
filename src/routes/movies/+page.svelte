@@ -28,5 +28,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>All the movies</title>
+	<meta name="description" content="All the movies that are available." />
+</svelte:head>
+
 <Filter />
 <MoviesGrid title="All the movies" {loadMore} {hasMore} {data} />

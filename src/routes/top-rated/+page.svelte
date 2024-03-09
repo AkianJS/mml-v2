@@ -23,6 +23,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Top Rated</title>
+	<meta name="description" content="Movies that are top rated." />
+</svelte:head>
+
 <div class="mt-8">
 	<MoviesGrid title="They are coming!" {loadMore} {hasMore} {data} />
 </div>
