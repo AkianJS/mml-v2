@@ -18,10 +18,8 @@
 	</main>
 </div>
 
-<!-- {#key $currentMovie?.movie.id} -->
 <Drawer open={$currentMovie?.opened}>
 	{#if $currentMovie}
 		<MovieDetail data={$currentMovie} />
 	{/if}
 </Drawer>
-<!-- {/key} -->

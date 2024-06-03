@@ -1,18 +1,18 @@
 <script lang="ts">
 	export let open = false;
 
-	function handleOutsideClick(event) {
+	function handleOutsideClick(event: MouseEvent) {
 		if (event.target === event.currentTarget) {
 			open = false;
 		}
 	}
 </script>
 
-<div
+<button
 	class:hidden={!open}
 	on:click={handleOutsideClick}
 	class="fixed inset-0 z-50 bg-black bg-opacity-50"
-></div>
+></button>
 <div
 	class="fixed inset-y-0 right-0 z-50 bg-primary sm:w-3/4 xl:w-2/4 {open
 		? 'translate-x-0'

@@ -43,6 +43,8 @@ export type MovieDetail = {
 	poster_path: string;
 	production_companies: ProductionCompanies[];
 	status: string;
+	trailer: string;
+	poster?: string;
 	tagline: string | null;
 	vote_average: number;
 	vote_count: number;

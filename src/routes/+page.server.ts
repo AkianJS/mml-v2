@@ -19,7 +19,7 @@ export const load: PageServerLoad = (async ({ fetch }) => {
 			url: `movie/${movie.id}/videos`,
 			fetch
 		});
-		movie.trailer = detailData.results.filter((video) => video.type === 'Trailer')[0].key;
+		movie.trailer = detailData.results.filter((video) => video.type === 'Trailer')[0]?.key;
 	}
 
 	for (const movie of data.results) {
