@@ -1,21 +1,12 @@
 <script lang="ts">
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import Drawer from '$lib/components/drawer/Drawer.svelte';
 	import Navbar from '$lib/components/layout/Navbar.svelte';
 	import { populateNavbarItemI } from '$lib/components/layout/navbarItems';
-	import { Flip } from '$lib/utils/scripts';
+	import MovieDetail from '$lib/components/movie-detail/MovieDetail.svelte';
+	import { currentMovie } from '$lib/store/current-movie.store';
 	import '../app.css';
 
 	const navbarItems = populateNavbarItemI();
-
-	let state: Flip.FlipState;
-
-	beforeNavigate(() => {
-		state = Flip.getState('.movie-id');
-	});
-
-	afterNavigate(() => {
-		if (state) Flip.from(state, { duration: 0.3, scale: true, targets: '.movie-id' });
-	});
 </script>
 
 <Navbar {navbarItems} />
@@ -26,3 +17,11 @@
 		</div>
 	</main>
 </div>
+
+<!-- {#key $currentMovie?.movie.id} -->
+<Drawer open={$currentMovie?.opened}>
+	{#if $currentMovie}
+		<MovieDetail data={$currentMovie} />
+	{/if}
+</Drawer>
+<!-- {/key} -->

@@ -24,7 +24,6 @@ export const load: PageServerLoad = (async ({ params, fetch }) => {
 		return {
 			movie,
 			images,
-			videos,
 			streamed: {
 				videos
 			},

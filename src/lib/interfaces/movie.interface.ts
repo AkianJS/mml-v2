@@ -1,6 +1,6 @@
 export interface MovieI {
 	page: number;
-	results: Movie[];
+	results: MovieDetail[];
 	total_pages: number;
 }
 
@@ -26,7 +26,7 @@ export type Movie = {
 
 export type MovieDetail = {
 	adult: boolean;
-	backdrop_path: string | null;
+	backdrop_path?: string;
 	release_date: string;
 	budget: number;
 	genres: Genre[];

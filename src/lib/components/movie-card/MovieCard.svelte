@@ -1,18 +1,23 @@
 <script lang="ts">
 	import placeholder from '$lib/assets/image-placeholder.png';
-	import type { Genre, Movie } from '$lib/interfaces/movie.interface';
+	import type { ImageInterface } from '$lib/interfaces/images.interface';
+	import type { Genre, MovieDetail, VideosType } from '$lib/interfaces/movie.interface';
+	import { currentMovie } from '$lib/store/current-movie.store';
+	import { getMovies } from '$lib/utils/movies-fetch';
 	import Icon from '@iconify/svelte';
 	import gsap from 'gsap';
 	import { onMount } from 'svelte';
 
-	export let movie: Movie;
+	export let movie: MovieDetail;
 	export let id: number;
+
+	const images: Promise<ImageInterface> = getMovies({ url: `movie/${movie.id}/images`, fetch });
+
+	const videos: Promise<VideosType> = getMovies({ url: `movie/${movie.id}/videos`, fetch });
 
 	let activeImageRef: HTMLImageElement;
 	let hiddenImageRef: HTMLImageElement;
 	let imageContainerRef: HTMLElement;
-	let wasCardClicked = false;
-	let tl: GSAPTimeline;
 
 	const randNumber = Math.floor(Math.random() * 10);
 
@@ -52,59 +57,20 @@
 		animation(id);
 	});
 
-	const animateCardEnter = () => {
-		tl = gsap
-			.timeline()
-			.to(activeImageRef, {
-				duration: 0.3,
-				ease: 'power2.out',
-				x: imageContainerRef.offsetWidth,
-				opacity: 0
-			})
-			.fromTo(
-				hiddenImageRef,
-				{
-					x: -imageContainerRef.offsetWidth,
-					opacity: 0
-				},
-				{
-					duration: 0.3,
-					ease: 'power2.in',
-					x: 0,
-					opacity: 1
-				},
-				'<'
-			)
-			.to(imageContainerRef, {
-				width: '500px',
-				height: '280px',
-				duration: 0.4,
-				ease: 'power2.out'
-			})
-			.to(hiddenImageRef, {
-				width: '500px',
-				height: '280px',
-				duration: 0.2,
-				ease: 'power2.out'
-			});
-	};
-
-	const animateCardLeave = () => {
-		if (wasCardClicked) return;
-
-		if (tl) tl.reverse();
-	};
-
-	const handleCardClicked = () => {
-		wasCardClicked = true;
-	};
+	function handleOpenMovieDetails() {
+		currentMovie.set({
+			movie,
+			streamed: {
+				images,
+				videos
+			},
+			opened: true
+		});
+	}
 </script>
 
-<a
-	on:mouseenter={animateCardEnter}
-	on:mouseleave={animateCardLeave}
-	on:click={handleCardClicked}
-	href={`/movies/${movie.id}`}
+<button
+	on:click={handleOpenMovieDetails}
 	class={`card-animation-${id} relative w-96 space-y-2 overflow-hidden sm:w-[250px]`}
 >
 	<figure
@@ -120,7 +86,6 @@
 			alt={movie.title}
 		/>
 		<img
-			data-flip-id="movie-{movie.id}"
 			bind:this={hiddenImageRef}
 			class="movie-id absolute left-0 top-0 w-96 rounded-2xl object-cover opacity-0 sm:h-[140px] sm:w-[250px]"
 			src={getHiddenImageUrl(movie.poster_path)}
@@ -131,8 +96,8 @@
 	</figure>
 	<h2 class="font-semibold">{movie.title}</h2>
 	<p>{getRuntime(movie?.runtime)} · {getGenres(movie.genres)}</p>
-	<p class="absolute right-2 top-0 flex items-center gap-x-2">
+	<p class="absolute -top-2 right-0 flex items-center gap-x-2 rounded-lg bg-black p-1">
 		{movie.vote_average?.toFixed(2)}
 		<Icon icon="bi:star-fill" width={24} class="text-yellow-400" />
 	</p>
-</a>
+</button>
