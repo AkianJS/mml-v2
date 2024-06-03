@@ -108,7 +108,6 @@
 	filter.subscribe((value) => {
 		selectedGenre = value.genre ?? 0;
 		selectedYear = value.year ?? 0;
-		console.log('selected Year', selectedYear);
 	});
 </script>
 
